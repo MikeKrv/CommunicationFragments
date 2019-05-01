@@ -20,36 +20,42 @@ class HostActivity : AppCompatActivity(), FragmentA.OnButtonClickListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_host)
-        counter =  sharedViewModel.liveCounter.value ?: 0
+        counter = sharedViewModel.liveCounter.value ?: 0
 
-        addFragments()
-
+        if (savedInstanceState == null || landscape) {
+            addFragments()
+        }
     }
 
     private fun addFragments() {
         if (portrait) {
-            supportFragmentManager.beginTransaction()
-                .replace(R.id.fragments_container, FragmentA.newInstance())
-                .commit()
-        }
-
-        if(landscape){
-            supportFragmentManager.beginTransaction()
-                .replace(R.id.fragmentA_container, FragmentA.newInstance())
-                .replace(R.id.fragmentB_container, FragmentB.newInstance())
-                .commit()
+            with(supportFragmentManager.beginTransaction()) {
+                add(R.id.fragments_container, FragmentA.newInstance())
+                commit()
+            }
+        } else {
+            with(supportFragmentManager.beginTransaction()) {
+                replace(R.id.fragmentA_container, FragmentA.newInstance())
+                replace(R.id.fragmentB_container, FragmentB.newInstance())
+                commit()
+            }
         }
     }
 
     private fun replaceFragments() {
-        if (portrait){
-            supportFragmentManager.beginTransaction()
-                .setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_right, R.anim.enter_from_right, R.anim.exit_to_right)
-                .addToBackStack(null)
-                .replace(R.id.fragments_container, FragmentB.newInstance())
-                .commit()
+        if (portrait) {
+            with(supportFragmentManager.beginTransaction()) {
+                setCustomAnimations(
+                    R.anim.enter_from_right,
+                    R.anim.exit_to_right,
+                    R.anim.enter_from_right,
+                    R.anim.exit_to_right
+                )
+                addToBackStack(null)
+                add(R.id.fragments_container, FragmentB.newInstance())
+                commit()
+            }
         }
-
     }
 
     override fun onButtonClick() {
@@ -59,6 +65,6 @@ class HostActivity : AppCompatActivity(), FragmentA.OnButtonClickListener {
 
     override fun onBackPressed() {
         super.onBackPressed()
-        if (landscape)finish()
+        if (landscape) finish() else supportFragmentManager.popBackStack()
     }
 }

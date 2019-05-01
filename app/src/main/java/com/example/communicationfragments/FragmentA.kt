@@ -34,11 +34,11 @@ class FragmentA : Fragment() {
         listener = null
     }
 
-    interface OnButtonClickListener{
+    interface OnButtonClickListener {
         fun onButtonClick()
-
     }
-    companion object{
+
+    companion object {
         fun newInstance() = FragmentA()
     }
 }

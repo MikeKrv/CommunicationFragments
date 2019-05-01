@@ -33,6 +33,4 @@ class FragmentB : Fragment() {
     companion object {
         fun newInstance() = FragmentB()
     }
-
-
 }
